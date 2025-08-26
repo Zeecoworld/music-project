@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}All Songs - Music Playlist{% endblock %}
+
+{% block content %}
+<!-- Search Section -->
+<section class="search-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="text-center mb-4">
+                    <i class="fas fa-search me-2"></i>Discover Music
+                </h2>
+                <form method="GET" class="d-flex">
+                    {{ search_form.search_query }}
+                    <button class="btn btn-light ms-2" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    {% if request.GET.search_query %}
+                        <a href="{% url 'music_list' %}" class="btn btn-outline-light ms-2">Clear</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Songs Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>
+                {% if request.GET.search_query %}
+                    Search Results ({{ total_songs }} found)
+                {% else %}
+                    All Songs ({{ total_songs }} total)
+                {% endif %}
+            </h3>
+            <a href="{% url 'add_music' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add New Song
+            </a>
+        </div>
+
+        {% if songs %}
+            <div class="row">
+                {% for song in songs %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card song-card shadow">
+                            {% if song.get_album_cover %}
+                                <img src="{{ song.get_album_cover }}" class="card-img-top album-cover" alt="Album cover for {{ song.song_title }}">
+                            {% else %}
+                                <div class="card-img-top album-cover bg-light d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-music fa-3x text-muted"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="card-body">
+                                <h5 class="card-title">{{ song.song_title }}</h5>
+                                <p class="card-text">
+                                    <strong>Artist:</strong> {{ song.artist }}<br>
+                                    <small class="text-muted">Added {{ song.created_at|date:"M d, Y" }}</small>
+                                </p>
+                                
+                                {% if song.spotify_youtube_url %}
+                                    <a href="{{ song.spotify_youtube_url }}" target="_blank" class="btn btn-success btn-sm">
+                                        <i class="fas fa-external-link-alt me-1"></i>
+                                        {% if 'spotify' in song.spotify_youtube_url %}Spotify{% else %}YouTube{% endif %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-music fa-5x text-muted mb-3"></i>
+                <h4>No songs found</h4>
+                <p class="text-muted">
+                    {% if request.GET.search_query %}
+                        No songs match your search. <a href="{% url 'music_list' %}">View all songs</a>
+                    {% else %}
+                        Start building your playlist by adding some songs!
+                    {% endif %}
+                </p>
+                <a href="{% url 'add_music' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Add Your First Song
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

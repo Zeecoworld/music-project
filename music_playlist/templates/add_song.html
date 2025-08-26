@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Song - Music Playlist{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-plus-circle me-2"></i>Add New Song
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.song_title.id_for_label }}" class="form-label">
+                                    <i class="fas fa-music me-1"></i>Song Title *
+                                </label>
+                                {{ form.song_title }}
+                                {% if form.song_title.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.song_title.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.artist.id_for_label }}" class="form-label">
+                                    <i class="fas fa-user me-1"></i>Artist *
+                                </label>
+                                {{ form.artist }}
+                                {% if form.artist.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.artist.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.album_cover.id_for_label }}" class="form-label">
+                                    <i class="fas fa-image me-1"></i>Album Cover (Upload)
+                                </label>
+                                {{ form.album_cover }}
+                                {% if form.album_cover.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.album_cover.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">Or use the URL field below instead</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.album_cover_url.id_for_label }}" class="form-label">
+                                    <i class="fas fa-link me-1"></i>Album Cover (URL)
+                                </label>
+                                {{ form.album_cover_url }}
+                                {% if form.album_cover_url.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.album_cover_url.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">Alternative to uploading a file</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.spotify_youtube_url.id_for_label }}" class="form-label">
+                                    <i class="fab fa-spotify me-1"></i>Spotify/YouTube URL *
+                                </label>
+                                {{ form.spotify_youtube_url }}
+                                {% if form.spotify_youtube_url.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.spotify_youtube_url.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="form-text text-muted">Link to the song on Spotify or YouTube</small>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a href="{% url 'music_list' %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left me-1"></i>Back to List
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i>Add Song
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
